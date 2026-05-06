@@ -1,11 +1,16 @@
 {
+  "name": "claude-skills",
+  "owner": {
+    "name": "skealeye"
+  },
   "plugins": [
     {
       "name": "gdd",
       "source": {
-        "type": "git",
-        "url": "https://github.com/skealeye/ClaudeSkills"
-      }
+        "source": "github",
+        "repo": "skealeye/ClaudeSkills"
+      },
+      "description": "Standardized Game Design Document creation with Obsidian-compatible output and GitHub automation"
     }
   ]
 }
