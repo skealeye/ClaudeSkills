@@ -1,0 +1,10 @@
+{
+  "name": "gdd",
+  "description": "Standardized Game Design Document creation, authoring, and maintenance with Obsidian-compatible output and GitHub automation",
+  "version": "1.0.0",
+  "author": {
+    "name": "skealeye"
+  },
+  "homepage": "https://github.com/skealeye/ClaudeSkills",
+  "repository": "https://github.com/skealeye/ClaudeSkills"
+}
