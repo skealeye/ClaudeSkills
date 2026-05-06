@@ -7,8 +7,8 @@
     {
       "name": "gdd",
       "source": {
-        "source": "github",
-        "repo": "skealeye/ClaudeSkills"
+        "source": "url",
+        "url": "https://github.com/skealeye/ClaudeSkills.git"
       },
       "description": "Standardized Game Design Document creation with Obsidian-compatible output and GitHub automation"
     }
