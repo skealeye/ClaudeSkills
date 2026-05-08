@@ -1,6 +1,6 @@
 ---
 name: gdd
-description: Use when creating, updating, or maintaining a Game Design Document (GDD) — covers project setup, GitHub repo creation, Obsidian-compatible section authoring, and version control
+description: Use when creating, updating, or maintaining a Game Design Document (GDD) — covers concept research, genre analysis, competitive analysis, project setup, GitHub repo creation, Obsidian-compatible section authoring, and version control
 ---
 
 # Game Design Document
@@ -31,7 +31,70 @@ If repo creation fails, present the error and let user retry or connect to exist
 
 ---
 
-## Phase 1: Project Setup
+## Phase 1: Concept & Research
+
+Ask: *"Do you already have a game concept, or would you like help brainstorming one?"*
+
+If the user already has a detailed concept and wants to skip research, proceed directly to **Phase 2: Project Setup**.
+
+### Path A — User Has an Idea
+
+1. Ask them to describe their game concept (elevator pitch, core mechanics, theme)
+2. Identify the primary genre(s) it falls into
+3. Proceed to **Genre Research** below
+
+### Path B — User Wants Help Brainstorming
+
+1. Ask: *"What genre or genres are you interested in?"*
+   - Offer common genres: Action, RPG, Roguelike, Strategy, Simulation, Survival, Horror, Puzzle, Platformer, FPS, MOBA, Card Game, Extraction Shooter, Idle/Incremental, etc.
+   - Allow multiple genre selections for hybrid concepts
+2. Proceed to **Genre Research** below
+3. After presenting research, collaborate with the user to shape a concept from the findings
+
+### Genre Research — Competitive Analysis
+
+For each selected genre, use `WebSearch` to find the most popular and notable titles. Present findings in a comparison table:
+
+```markdown
+## Competitive Analysis: <Genre>
+
+| Game | Similarities | Popularity | Userbase | Profit | Critical Reception | Community | Replayability | Streaming |
+|------|-------------|:----------:|:--------:|:------:|:-----------------:|:---------:|:-------------:|:---------:|
+| Game Title | Shared mechanics, themes | ★★★★☆ | ★★★☆☆ | ★★★★★ | ★★★★☆ | ★★★☆☆ | ★★★★★ | ★★★★☆ |
+```
+
+**Rating dimensions (1–5 stars):**
+
+| Dimension | What to Evaluate |
+|-----------|-----------------|
+| Popularity | Overall market presence, sales volume, brand recognition |
+| Userbase | Active player count, retention, growth trend |
+| Profit | Revenue, commercial success, ROI |
+| Critical Reception | Critic scores, user review aggregates (Metacritic, Steam) |
+| Community | Modding scene, Discord/forum activity, wiki contributions |
+| Replayability | Session variety, procedural content, endgame depth |
+| Streaming | Twitch/YouTube presence, content creator adoption |
+
+**Research guidelines:**
+- Find 5–8 comparable titles per genre
+- Prioritize games from the last 5 years, but include landmark older titles if highly relevant
+- Note which mechanics, themes, or design patterns appear across multiple successful titles
+- Highlight market gaps — underserved niches or mechanics no current title handles well
+
+### Concept Confirmation
+
+After research, summarize:
+1. **Key takeaways** — what works in this genre, common patterns
+2. **Market gaps** — opportunities the user's concept could fill
+3. **Risks** — oversaturated mechanics or declining trends
+
+Ask: *"Based on this research, are you happy with your concept direction? Any adjustments before we set up the project?"*
+
+Once confirmed, proceed to **Phase 2: Project Setup**.
+
+---
+
+## Phase 2: Project Setup
 
 Ask: *"Create a new private GitHub repo, or connect to an existing one?"*
 
@@ -123,7 +186,7 @@ Commit: `"Initialize GDD structure for <GameTitle>"` → push.
 
 ---
 
-## Phase 2: Section Selection
+## Phase 3: Section Selection
 
 1. Present default catalog from `section-catalog.md` (16 sections)
 2. Ask which are applicable — "Always" sections included by default
@@ -131,7 +194,7 @@ Commit: `"Initialize GDD structure for <GameTitle>"` → push.
 
 ---
 
-## Phase 3: Section Authoring
+## Phase 4: Section Authoring
 
 ### File Naming
 
@@ -170,7 +233,7 @@ related:
 
 ---
 
-## Phase 4: Parallel Subagent Dispatch
+## Phase 5: Parallel Subagent Dispatch
 
 ### Orchestrator Pattern
 
@@ -207,7 +270,7 @@ Batch 5: 16 - Development Roadmap (references everything, written last)
 
 ---
 
-## Phase 5: Sprint Planning
+## Phase 6: Sprint Planning
 
 Triggered after all GDD sections are complete.
 
@@ -245,7 +308,7 @@ Commit: `"Add sprint plan for <GameTitle>"` → push. Update Index.
 
 ---
 
-## Phase 6: Ongoing Maintenance
+## Phase 7: Ongoing Maintenance
 
 On every design change:
 1. Update affected section(s)
