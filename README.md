@@ -6,7 +6,7 @@ A collection of skills for [Claude Code](https://claude.com/claude-code), distri
 
 | Skill | Description |
 |-------|-------------|
-| `gdd` | Standardized Game Design Document creation, authoring, and maintenance with Obsidian-compatible output and GitHub automation. |
+| `gdd` | Researches your game's genre, then writes and maintains a full Game Design Document in a private GitHub repo. Read it in Obsidian (the skill can install it for you) or as an exported PDF. |
 
 ## Installation
 
@@ -52,3 +52,21 @@ The `gdd` skill uses git and the GitHub CLI to create and version-control your G
 - [GitHub CLI (`gh`)](https://cli.github.com/), signed in with `gh auth login`
 
 If `gh` isn't available, the skill can still work in local-only mode (local git, with no remote push).
+
+### Reading your GDD
+
+During setup the skill asks how you want to read the document:
+
+- **Obsidian** (recommended): clickable links between sections, graph view and live editing. If Obsidian isn't installed, the skill can install it for you (`winget` on Windows, Homebrew on macOS, Flatpak/Snap on Linux), or you can download it from [obsidian.md](https://obsidian.md/download). Then choose *Open folder as vault* and select your game's `GDD` folder.
+- **PDF**: a single document with a cover, contents page and clickable cross-references. It is rebuilt automatically whenever the GDD changes. This needs Python 3 and Chrome, Edge, Chromium or Brave. No other packages are required.
+- **Both**: you can also ask for a PDF export at any time ("export my GDD to PDF").
+
+## What's new in 2.0
+
+- **Section catalog for any genre:** adds Story & Characters, Controls & Input, Enemies & AI, Puzzle Mechanics, Multiplayer & Social, Tutorial & Onboarding, Technical Design, Analytics & Live Ops, Localization & Ratings, and Scope & MVP. Section numbers changed from 1.x.
+- **Research is saved:** competitive analysis is stored in `02 - Market Research`, and every rating needs a source.
+- **Fewer invented details:** unmade decisions become open questions, and you approve the pillars before anything else is written.
+- **Consistent sections:** a shared Glossary & Design Constants file, plus a consistency review after each batch.
+- **Decision Log:** records why each design change was made.
+- **Better sprint planning:** plan length and sprint length are separate, tasks have sizes, and the plan can optionally be mirrored to GitHub Issues.
+- **Obsidian install and PDF export.**
