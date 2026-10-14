@@ -1,13 +1,13 @@
 ---
 name: gdd
-description: Use when creating, updating, or maintaining a Game Design Document (GDD) — covers concept research, genre analysis, competitive analysis, project setup, GitHub repo creation, Obsidian-compatible section authoring, Obsidian installation, PDF export, and version control
+description: Use when creating, updating, or maintaining a Game Design Document (GDD) — covers concept research, genre analysis, competitive analysis with visual web reports, project setup, GitHub repo creation, Obsidian-compatible section authoring, Obsidian installation, PDF export, and version control
 ---
 
 # Game Design Document
 
 ## Overview
 
-Standardized workflow for creating and maintaining Game Design Documents. Enforces consistent structure, Obsidian-compatible markdown, automated GitHub version control, parallel subagent authoring with consistency checks, and sprint planning. The GDD can be read in Obsidian, exported to PDF, or both.
+Standardized workflow for creating and maintaining Game Design Documents. Enforces consistent structure, Obsidian-compatible markdown, automated GitHub version control, parallel subagent authoring with consistency checks, and sprint planning. The GDD can be read in Obsidian, exported to PDF, or both. Every analysis is also shown to the user as a clean visual web page (see **Analysis Reports**).
 
 **The user owns the design.** Claude researches, structures, drafts and proposes. It does not silently make design decisions the user hasn't made — unknowns become open questions (see **Open Questions** below).
 
@@ -95,6 +95,8 @@ After research, summarize:
 1. **Key takeaways** — what works in this genre, common patterns
 2. **Market gaps** — opportunities the user's concept could fill
 3. **Risks** — oversaturated mechanics or declining trends
+
+Build the **Market Research** analysis report (see **Analysis Reports**): stat tiles, a `ratings` heatmap per genre (with each rating's evidence as its tooltip), `findings` for takeaways / gaps / risks, and `sources`. Show it to the user, then give a short text summary in chat.
 
 Ask: *"Based on this research, are you happy with your concept direction? Any adjustments before we set up the project?"*
 
@@ -449,7 +451,7 @@ Before committing, the orchestrator checks the batch against everything already 
 5. **Open Questions** — copy every new `[!QUESTION]` into the Index table
 6. **Pillars** — flag any mechanic that contradicts a design pillar in `01`
 
-Report what was fixed and any conflicts needing a decision in a short summary to the user.
+Report what was fixed and any conflicts needing a decision as a **Consistency Review** analysis report (a `checks` block, one row per check with `pass` / `fixed` / `conflict`, plus `findings` of kind `question` for each decision needed — see **Analysis Reports**), and a short summary in chat.
 
 ### Commit Per Batch
 
@@ -503,6 +505,8 @@ Triggered after all GDD sections are complete, if the user wants it.
 
 **Optional — GitHub tracking:** offer to mirror the plan to GitHub: one milestone per sprint (`gh api repos/{owner}/{repo}/milestones -f title="Sprint 01" -f due_on=<ISO date>`) and one issue per task (`gh issue create --title <task> --milestone "Sprint 01" --label <Claude|Human|Both>`). Create the labels first with `gh label create`. Ask before creating — it's many issues.
 
+Build a **Sprint Plan** analysis report: stat tiles (sprints, tasks, total hours vs. capacity), a `timeline` of task groups by week (category `claude` / `human` / `both`), and a `bars` block of planned hours per sprint against capacity.
+
 Commit: `"Add sprint plan for <GameTitle>"` → push. Update Index.
 
 ---
@@ -554,6 +558,64 @@ Commit the PDF with the change that produced it: `"Export GDD PDF"` (or include 
 
 ---
 
+## Analysis Reports
+
+**Whenever the skill does analysis, show it to the user as a visual web page** — not only as chat text or markdown. This covers:
+
+| Trigger | Report |
+|---------|--------|
+| Phase 1 genre / competitive research | Market Research |
+| Consistency Review after each batch | Consistency Review — Batch N |
+| Phase 6 sprint planning | Sprint Plan |
+| Any analysis the user asks for (balance, scope, economy, pacing, GDD health, competitor deep-dive…) | Named after the question |
+
+Reports are built with `scripts/build_report.py` (Python standard library only) from a JSON spec, so every report shares one clean, readable design with light and dark themes and works on phones.
+
+### Spec
+
+```json
+{
+  "title": "Ember Tide Market Research",
+  "project": "Ember Tide",
+  "kind": "Market Research",
+  "subtitle": "One sentence on what this report answers.",
+  "blocks": [ { "type": "stats", "items": [ { "label": "Titles compared", "value": "6", "note": "optional" } ] } ]
+}
+```
+
+Every block takes an optional `heading` and `intro`. Text fields accept `**bold**`, `` `code` ``, `[[wiki-links]]` and `[label](https://url)`.
+
+| Block `type` | Fields | Use for |
+|--------------|--------|---------|
+| `stats` | `items: [{label, value, note?}]` | 2–4 headline numbers at the top |
+| `ratings` | `dimensions: [..]`, `rows: [{name, year?, similarities?, ratings: {dim: 1–5 or null}, evidence?: {dim: "figure, source"}, highlight?}]`, `scale?` | Competitive-analysis heatmap; `null` shows `?`; evidence becomes the cell tooltip; adds an Average column |
+| `bars` | `items: [{label, value, display?, highlight?}]`, `unit?`, `max?`, `caption?` | Ranked comparisons (review scores, hours per sprint, cost per system) |
+| `findings` | `items: [{kind, title, body}]` — kind: `takeaway`, `pattern`, `gap`, `risk`, `question`, `decision`, `note` | Insight cards |
+| `checks` | `items: [{status, label, detail?}]` — status: `pass`, `fixed`, `conflict`, `warning`, `fail`, `info` | Checklists with a status summary |
+| `timeline` | `items: [{label, start, length, category?}]`, `weeks?`, `unit?` — category: `claude`, `human`, `both` | Sprint / roadmap Gantt |
+| `table` | `headers: [..]`, `rows: [[..]]` | Any other tabular data |
+| `list` | `items: [..]`, `ordered?` | Short bullet lists |
+| `text` | `body` (paragraphs separated by blank lines) | Narrative |
+| `sources` | `items: [{label, url?, note?}]` | Every source behind the numbers |
+
+Put the answer first: stats, then the main chart, then findings, then detail and sources. Use only numbers found in research or in the GDD — the same no-invented-numbers rule as the competitive analysis.
+
+### Build and show
+
+1. Write the spec to a temp file (e.g. `<repo-root>/<GameTitle>/GDD/reports/.spec.json`, deleted after).
+2. Build the standalone copy into the repo, so the report is kept with the GDD:
+   ```bash
+   python "<skill-dir>/scripts/build_report.py" spec.json -o "<repo-root>/<GameTitle>/GDD/reports/<YYYY-MM-DD> - <Report Name>.html"
+   ```
+3. Show it to the user:
+   - **If the `Artifact` tool is available** (claude.ai / Claude Code with Artifacts): build an Artifact-ready copy with `--fragment` into a temp folder, named after the report (e.g. `Ember Tide Market Research.html`), and publish it with `Artifact` (`icon: "chart"`, a one-sentence `description`). Give the user the link. When the same report is rebuilt later in the session (e.g. the next consistency batch), publish a new file for a new report, or the same path to update an existing one.
+   - **Otherwise:** add `--open` to step 2 to open the standalone page in the default browser, and tell the user the file path.
+4. Commit the HTML in `reports/` with the change that produced it. Link it from `00 - Index.md` under a `## Reports` list (`- [<Report Name>](reports/<file>.html)`); Obsidian opens it in the browser.
+
+The PDF export ignores `reports/`.
+
+---
+
 ## Rules (Always Enforced)
 
 - Obsidian-compatible markdown only (wiki-links, callouts)
@@ -563,6 +625,7 @@ Commit the PDF with the change that produced it: `"Export GDD PDF"` (or include 
 - Names and shared numbers come from `03 - Glossary & Design Constants`
 - Unmade decisions are `[!QUESTION]` callouts, never silent inventions
 - Every competitive-analysis rating has a source, or is `?`
+- Every analysis is shown as a visual web report (Artifact when available, otherwise a local HTML page)
 - Index always reflects current state, including open questions
 - Decisions are logged in `27 - Decision Log`
 - Consistency review before every batch commit

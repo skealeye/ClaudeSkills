@@ -10,7 +10,7 @@
         "source": "url",
         "url": "https://github.com/skealeye/ClaudeSkills.git"
       },
-      "description": "Standardized Game Design Document creation with Obsidian-compatible output, PDF export, and GitHub automation"
+      "description": "Standardized Game Design Document creation with Obsidian-compatible output, visual analysis reports, PDF export, and GitHub automation"
     }
   ]
 }

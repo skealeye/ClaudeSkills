@@ -6,7 +6,7 @@ A collection of skills for [Claude Code](https://claude.com/claude-code), distri
 
 | Skill | Description |
 |-------|-------------|
-| `gdd` | Researches your game's genre, then writes and maintains a full Game Design Document in a private GitHub repo. Read it in Obsidian (the skill can install it for you) or as an exported PDF. |
+| `gdd` | Researches your game's genre, then writes and maintains a full Game Design Document in a private GitHub repo. Every analysis (market research, consistency reviews, sprint plans) is shown as a visual web report. Read the GDD in Obsidian (the skill can install it for you) or as an exported PDF. |
 
 ## Installation
 
@@ -60,6 +60,10 @@ During setup the skill asks how you want to read the document:
 - **Obsidian** (recommended): clickable links between sections, graph view and live editing. If Obsidian isn't installed, the skill can install it for you (`winget` on Windows, Homebrew on macOS, Flatpak/Snap on Linux), or you can download it from [obsidian.md](https://obsidian.md/download). Then choose *Open folder as vault* and select your game's `GDD` folder.
 - **PDF**: a single document with a cover, contents page and clickable cross-references. It is rebuilt automatically whenever the GDD changes. This needs Python 3 and Chrome, Edge, Chromium or Brave. No other packages are required.
 - **Both**: you can also ask for a PDF export at any time ("export my GDD to PDF").
+
+## What's new in 2.1
+
+- **Visual analysis reports:** market research, consistency reviews, sprint plans and any analysis you ask for are shown as clean web pages with charts: a rating heatmap with a source on every cell, bar charts, status checklists and a sprint timeline. With Artifacts available (claude.ai or Claude Code), the report is published as a private Artifact link. Otherwise it opens in your browser. A copy is saved in the GDD's `reports/` folder. This needs Python 3, the same as PDF export.
 
 ## What's new in 2.0
 
