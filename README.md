@@ -61,6 +61,12 @@ During setup the skill asks how you want to read the document:
 - **PDF**: a single document with a cover, contents page and clickable cross-references. It is rebuilt automatically whenever the GDD changes. This needs Python 3 and Chrome, Edge, Chromium or Brave. No other packages are required.
 - **Both**: you can also ask for a PDF export at any time ("export my GDD to PDF").
 
+### Adding art
+
+Once the GDD is written, the separate GDD Art Director app (a Windows desktop app, in its own repo) walks through it
+with you as an art director: reference boards, concept art generated on your own ComfyUI, and a final GDD with art
+as Obsidian notes and a designed PDF. It's optional; the GDD skill works the same without it.
+
 ## What's new in 2.1
 
 - **Visual analysis reports:** market research, consistency reviews, sprint plans and any analysis you ask for are shown as clean web pages with charts: a rating heatmap with a source on every cell, bar charts, status checklists and a sprint timeline. With Artifacts available (claude.ai or Claude Code), the report is published as a private Artifact link. Otherwise it opens in your browser. A copy is saved in the GDD's `reports/` folder. This needs Python 3, the same as PDF export.
